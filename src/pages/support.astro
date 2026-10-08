@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Support" description="Get help with your Ecozenin wall decor.">
+  <div class="wrap page">
+    <div class="page-head">
+      <h1>Get help</h1>
+      <p class="lede">Email us and a person replies within two business days.</p>
+    </div>
+    <div class="prose">
+      <p>
+        <a class="btn" href={`mailto:${site.supportEmail}`}>Email {site.supportEmail}</a>
+      </p>
+      <h2>What to include</h2>
+      <ul>
+        <li>The date you ordered it on Amazon.</li>
+        <li>A photo, if something is damaged, missing or not sitting right.</li>
+        <li>The email address you registered with, if you registered your warranty.</li>
+      </ul>
+      <h2>Faster answers</h2>
+      <p>
+        The <a href="/faq">FAQ</a> covers the warranty, returns and where to buy. For a return or a replacement
+        inside Amazon's return window, <em>Your Orders</em> on Amazon is the quickest route.
+      </p>
+    </div>
+  </div>
+</Base>

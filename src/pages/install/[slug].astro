@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../data/site';
+import { products } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const { tools, steps } = product.install;
+---
+
+<Base
+  title={`Install your ${product.name}`}
+  description={`How to put up the ${product.name}, step by step.`}
+>
+  <div class="wrap page">
+    <div class="page-head">
+      <h1>Install your {product.name}</h1>
+      {
+        steps.length > 0 ? (
+          <p class="lede">{product.install.intro}</p>
+        ) : (
+          <p class="lede">The step-by-step guide is being finished and will appear on this page.</p>
+        )
+      }
+    </div>
+
+    <div class="prose">
+      {
+        tools.length > 0 && (
+          <>
+            <h2>What you need</h2>
+            <ul>
+              {tools.map((tool) => (
+                <li>{tool}</li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+
+      {
+        steps.length > 0 && (
+          <>
+            <h2>Steps</h2>
+            <ol class="steps">
+              {steps.map((step) => (
+                <li>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </li>
+              ))}
+            </ol>
+          </>
+        )
+      }
+
+      <p class="note">
+        Stuck, or is something missing from the box? Email{' '}
+        <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a> with a photo and we'll walk you through it.
+      </p>
+      <p>
+        <a class="btn btn-quiet" href={`/register?product=${product.code}`}>Register your warranty</a>
+      </p>
+    </div>
+  </div>
+</Base>

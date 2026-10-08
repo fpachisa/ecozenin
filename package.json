@@ -1,0 +1,17 @@
+{
+  "name": "ecozenin-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "emulators": "npm run build && firebase emulators:start --project demo-ecozenin",
+    "deploy": "npm run build && firebase deploy"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/figtree": "^5.3.0",
+    "astro": "^7.3.7"
+  }
+}

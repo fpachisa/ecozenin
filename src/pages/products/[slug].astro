@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import HungFrame from '../../components/HungFrame.astro';
+import AmazonButton from '../../components/AmazonButton.astro';
+import { products } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+const { product } = Astro.props;
+---
+
+<Base title={product.name} description={product.summary}>
+  <div class="wrap page product">
+    <div class="product-wall">
+      <HungFrame image={product.image} alt={product.imageAlt} eager />
+    </div>
+    <div class="product-info">
+      <h1>{product.name}</h1>
+      <p class="lede">{product.summary}</p>
+      {product.description.map((paragraph) => <p>{paragraph}</p>)}
+      <div class="actions">
+        <AmazonButton url={product.amazonUrl} />
+        <a class="btn btn-quiet" href={`/register?product=${product.code}`}>Register your warranty</a>
+      </div>
+      <p><a href={`/install/${product.slug}`}>How to install it</a></p>
+      {
+        product.details.length > 0 && (
+          <dl class="details">
+            {product.details.map((detail) => (
+              <div>
+                <dt>{detail.label}</dt>
+                <dd>{detail.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+    </div>
+  </div>
+</Base>

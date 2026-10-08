@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import HungFrame from '../components/HungFrame.astro';
+import AmazonButton from '../components/AmazonButton.astro';
+import { site } from '../data/site';
+import { products } from '../data/products';
+
+const product = products[0];
+---
+
+<Base>
+  <section slot="hero" class="wrap hero">
+    <div>
+      <h1>{site.tagline}</h1>
+      <p class="hero-lede">
+        {site.description}
+        {!product.amazonUrl && ' Our first piece is on its way to Amazon.'}
+      </p>
+      <div class="actions">
+        <AmazonButton url={product.amazonUrl} />
+        <a class="btn btn-quiet" href={`/products/${product.slug}`}>See the piece</a>
+      </div>
+    </div>
+    <HungFrame image={product.image} alt={product.imageAlt} eager />
+  </section>
+
+  <section class="wrap owners">
+    <h2>Already have one on your wall?</h2>
+    <ul class="owner-links">
+      <li>
+        <a href="/register">Register your warranty</a>
+        <p>It takes about a minute and covers you for a year from the day you bought it.</p>
+      </li>
+      <li>
+        <a href={`/install/${product.slug}`}>Install it</a>
+        <p>How to put it up, step by step.</p>
+      </li>
+      <li>
+        <a href="/faq">Read the FAQ</a>
+        <p>Answers on the warranty, returns and where to buy.</p>
+      </li>
+      <li>
+        <a href="/support">Get help</a>
+        <p>Something missing, damaged or not sitting right? Email us and we'll sort it out.</p>
+      </li>
+    </ul>
+  </section>
+</Base>

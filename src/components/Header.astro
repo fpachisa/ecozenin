@@ -1,0 +1,40 @@
+---
+import { site } from '../data/site';
+import { products } from '../data/products';
+
+interface Props {
+  onWall?: boolean;
+}
+
+const { onWall = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const links = [
+  { href: `/products/${products[0].slug}`, label: 'Shop' },
+  { href: '/register', label: 'Register' },
+  { href: '/faq', label: 'FAQ' },
+  { href: '/support', label: 'Support' },
+];
+---
+
+<header class:list={['site-header', { 'on-wall': onWall }]}>
+  <div class="wrap">
+    <a class="brand" href="/">
+      <span class="mark" aria-hidden="true"></span>
+      {site.name}
+    </a>
+    <nav aria-label="Main">
+      <ul class="site-nav">
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

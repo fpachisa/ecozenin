@@ -1,0 +1,17 @@
+---
+interface Props {
+  url: string | null;
+}
+
+const { url } = Astro.props;
+---
+
+{
+  url ? (
+    <a class="btn" href={url} rel="noopener">
+      Buy on Amazon
+    </a>
+  ) : (
+    <span class="btn btn-pending">Coming soon to Amazon</span>
+  )
+}

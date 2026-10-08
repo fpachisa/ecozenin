@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Nothing is readable or writable from a browser. Registrations are
+    // written by the registerWarranty function, which uses the Admin SDK and
+    // is not subject to these rules.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

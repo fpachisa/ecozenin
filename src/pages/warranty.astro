@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Warranty terms" description="The one-year limited warranty on Ecozenin wall decor.">
+  <div class="wrap page">
+    <div class="page-head">
+      <h1>One-year limited warranty</h1>
+      <p class="updated">Last updated October 8, 2026</p>
+    </div>
+    <div class="prose">
+      <p>
+        {site.legalName} warrants each product to the original buyer against defects in materials and workmanship
+        for one year from the date of purchase.
+      </p>
+
+      <h2>What we do</h2>
+      <p>
+        If a covered defect appears within the year, we repair the product, replace it, or refund the price you
+        paid. We choose which, and we cover the shipping for a replacement.
+      </p>
+
+      <h2>What isn't covered</h2>
+      <ul>
+        <li>Accidental damage, misuse or alteration.</li>
+        <li>Damage from installing or hanging the product in a way the instructions don't describe.</li>
+        <li>Normal wear, including gradual fading or colour change.</li>
+        <li>Products bought from anyone other than Ecozenin's official Amazon store.</li>
+      </ul>
+
+      <h2>How to claim</h2>
+      <p>
+        Email <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a> with a photo of the problem and proof
+        of purchase, such as your Amazon order confirmation. <a href="/register">Registering your warranty</a> isn't
+        required, but it speeds things up.
+      </p>
+
+      <h2>Your legal rights</h2>
+      <p>
+        This warranty gives you specific legal rights. You may have other rights that vary from state to state, and
+        nothing here limits them. To the extent the law allows, {site.legalName} isn't liable for incidental or
+        consequential damages; some states don't allow that limit, so it may not apply to you.
+      </p>
+    </div>
+  </div>
+</Base>

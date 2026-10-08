@@ -1,0 +1,14 @@
+---
+import { site } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; {new Date().getFullYear()} {site.legalName}</p>
+    <ul>
+      <li><a href="/warranty">Warranty terms</a></li>
+      <li><a href="/privacy">Privacy</a></li>
+      <li><a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a></li>
+    </ul>
+  </div>
+</footer>

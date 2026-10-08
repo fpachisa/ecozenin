@@ -1,0 +1,181 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { products } from '../data/products';
+
+const single = products.length === 1 ? products[0] : null;
+---
+
+<Base
+  title="Register your warranty"
+  description="Register your Ecozenin piece for its one-year warranty. It takes about a minute."
+>
+  <div class="wrap page register">
+    <div class="register-intro">
+      <h1>Register your warranty</h1>
+      <p class="lede">Tell us who you are and when you bought it. That's all we need.</p>
+      <ul>
+        <li>Covers defects in materials and workmanship for one year from purchase.</li>
+        <li>If something goes wrong, your details are already on file.</li>
+      </ul>
+    </div>
+
+    <form class="form" id="register-form" action="/api/register" method="post" novalidate>
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="100" required />
+        <p class="field-error" data-error-for="name" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          inputmode="email"
+          maxlength="254"
+          required
+        />
+        <p class="field-error" data-error-for="email" hidden></p>
+      </div>
+
+      {
+        single ? (
+          <div class="field">
+            <span class="label">Product</span>
+            <p class="fixed-value">{single.name}</p>
+            <input type="hidden" name="product" value={single.code} />
+          </div>
+        ) : (
+          <div class="field">
+            <label for="product">Product</label>
+            <select id="product" name="product" required>
+              <option value="">Choose your product</option>
+              {products.map((product) => (
+                <option value={product.code}>{product.name}</option>
+              ))}
+            </select>
+            <p class="field-error" data-error-for="product" hidden />
+          </div>
+        )
+      }
+
+      <div class="field">
+        <label for="purchaseDate">Purchase date</label>
+        <input id="purchaseDate" name="purchaseDate" type="date" required aria-describedby="date-hint" />
+        <p class="hint" id="date-hint">The order date shown in your Amazon account.</p>
+        <p class="field-error" data-error-for="purchaseDate" hidden></p>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" name="marketingOptIn" value="yes" />
+        <span>Email me when Ecozenin releases something new. Optional.</span>
+      </label>
+
+      <div class="trap" aria-hidden="true">
+        <label for="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="source" value="" />
+
+      <button class="btn" type="submit">Register warranty</button>
+      <p class="fineprint">
+        We use these details to manage your warranty. See the{' '}
+        <a href="/privacy">privacy policy</a> and <a href="/warranty">warranty terms</a>.
+      </p>
+    </form>
+  </div>
+</Base>
+
+<script define:vars={{ supportEmail: site.supportEmail }}>
+  const form = document.getElementById('register-form');
+  const formError = document.getElementById('form-error');
+  const button = form.querySelector('button[type="submit"]');
+  const params = new URLSearchParams(location.search);
+
+  // Local date, not UTC, so "today" is selectable in the evening in the US.
+  const now = new Date();
+  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  form.elements.purchaseDate.max = today;
+
+  // The QR code on the insert lands here as /register?product=<code>&source=insert.
+  const product = form.elements.product;
+  const wanted = params.get('product');
+  if (wanted && product.tagName === 'SELECT' && [...product.options].some((o) => o.value === wanted)) {
+    product.value = wanted;
+  }
+  form.elements.source.value = params.get('source') || '';
+
+  // Shown when the no-JavaScript fallback redirected back here.
+  if (params.has('error')) showFormError();
+
+  function showFormError(message) {
+    formError.textContent = '';
+    if (message) {
+      formError.textContent = message;
+    } else {
+      const link = document.createElement('a');
+      link.href = `mailto:${supportEmail}`;
+      link.textContent = supportEmail;
+      formError.append("We couldn't save your registration. Try again, or email ", link, '.');
+    }
+    formError.hidden = false;
+    formError.scrollIntoView({ block: 'center' });
+  }
+
+  function showFieldErrors(errors) {
+    let first = null;
+    for (const node of form.querySelectorAll('[data-error-for]')) {
+      const name = node.dataset.errorFor;
+      const input = form.elements[name];
+      const message = errors[name];
+      node.textContent = message || '';
+      node.hidden = !message;
+      if (message) {
+        input.setAttribute('aria-invalid', 'true');
+        first = first || input;
+      } else {
+        input.removeAttribute('aria-invalid');
+      }
+    }
+    if (first) first.focus();
+    return Boolean(first);
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    formError.hidden = true;
+    showFieldErrors({});
+
+    const data = Object.fromEntries(new FormData(form));
+    data.marketingOptIn = form.elements.marketingOptIn.checked;
+
+    button.disabled = true;
+    button.textContent = 'Registering…';
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        location.assign('/registered');
+        return;
+      }
+      const body = await response.json().catch(() => ({}));
+      if (response.status === 400 && body.errors && showFieldErrors(body.errors)) {
+        // each message is now next to its field
+      } else {
+        showFormError();
+      }
+    } catch {
+      showFormError("We couldn't reach the server. Check your connection and try again.");
+    }
+    button.disabled = false;
+    button.textContent = 'Register warranty';
+  });
+</script>

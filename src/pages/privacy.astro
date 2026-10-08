@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Privacy policy" description="What Ecozenin collects when you register a warranty, and why.">
+  <div class="wrap page">
+    <div class="page-head">
+      <h1>Privacy policy</h1>
+      <p class="updated">Last updated October 8, 2026</p>
+    </div>
+    <div class="prose">
+      <p>
+        This site is run by {site.legalName}. It collects personal information in one place only: the warranty
+        registration form.
+      </p>
+
+      <h2>What we collect</h2>
+      <ul>
+        <li>Your name and email address.</li>
+        <li>The product you registered and its purchase date.</li>
+        <li>Whether you asked to hear about new products.</li>
+      </ul>
+      <p>The site doesn't use advertising or tracking cookies.</p>
+
+      <h2>How we use it</h2>
+      <ul>
+        <li>To keep a record of your warranty and handle any claim.</li>
+        <li>To email you about new products, only if you ticked that box. Every such email has an unsubscribe link.</li>
+      </ul>
+      <p>We don't sell your information or share it for anyone else's marketing.</p>
+
+      <h2>Who handles it for us</h2>
+      <p>
+        Registrations are stored with Google Firebase, which also hosts this site. It processes the information only
+        on our instructions.
+      </p>
+
+      <h2>How long we keep it</h2>
+      <p>
+        We keep your registration for the length of the warranty and up to two years after it ends, in case of a
+        late question about a claim.
+      </p>
+
+      <h2>Your choices</h2>
+      <p>
+        Email <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a> to see, correct or delete your
+        registration, or to stop marketing emails. We act on requests within 30 days.
+      </p>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+const mail = `<a href="mailto:${site.supportEmail}">${site.supportEmail}</a>`;
+
+// Answers are HTML so they can carry links.
+const groups = [
+  {
+    title: 'Warranty',
+    items: [
+      {
+        q: 'How do I register my warranty?',
+        a: `<p>Fill in the <a href="/register">registration form</a> with your name, email and purchase date. It takes about a minute.</p>`,
+      },
+      {
+        q: 'What does the warranty cover?',
+        a: `<p>Defects in materials and workmanship for one year from the date you bought it. It doesn't cover accidental damage, normal wear, or damage from hanging it in a way the instructions don't describe.</p><p>The full wording is in the <a href="/warranty">warranty terms</a>.</p>`,
+      },
+      {
+        q: 'Am I covered if I never registered?',
+        a: `<p>Yes. The warranty runs from your purchase date whether or not you register. Registering means we already have your details when you get in touch, so a claim goes faster.</p>`,
+      },
+      {
+        q: 'How do I make a warranty claim?',
+        a: `<p>Email ${mail} with a photo of the problem and your Amazon order date. We reply within two business days with a repair, replacement or refund.</p>`,
+      },
+    ],
+  },
+  {
+    title: 'Buying and returns',
+    items: [
+      {
+        q: 'Where can I buy Ecozenin wall decor?',
+        a: `<p>On Amazon in the United States. We don't take orders on this site.</p>`,
+      },
+      {
+        q: 'Do you ship outside the United States?',
+        a: `<p>Not yet. Ecozenin is sold through Amazon.com only for now.</p>`,
+      },
+      {
+        q: 'How do I return my order?',
+        a: `<p>Returns go through Amazon. Open <em>Your Orders</em> in your Amazon account and choose <em>Return or replace items</em>. Amazon's return window and refund terms apply.</p>`,
+      },
+      {
+        q: 'My order arrived damaged or with something missing. What do I do?',
+        a: `<p>The quickest fix is a replacement through <em>Your Orders</em> on Amazon. If that isn't possible, email ${mail} with a photo and we'll put it right.</p>`,
+      },
+    ],
+  },
+];
+---
+
+<Base title="FAQ" description="Answers about the Ecozenin warranty, returns and where to buy.">
+  <div class="wrap page">
+    <div class="page-head">
+      <h1>Questions and answers</h1>
+      <p class="lede">
+        Can't find what you need? Email <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a>.
+      </p>
+    </div>
+    <div class="faq">
+      {
+        groups.map((group) => (
+          <>
+            <h2>{group.title}</h2>
+            {group.items.map((item) => (
+              <details>
+                <summary>{item.q}</summary>
+                <div class="faq-answer" set:html={item.a} />
+              </details>
+            ))}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</Base>
